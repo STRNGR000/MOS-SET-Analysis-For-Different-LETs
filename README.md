@@ -2,7 +2,7 @@
 Transient currents at different LETs are analysed when ion is struck at Drain-Substrate junction. It is done in Silvaco Atlas.
 
 ### Procedure
-The drain-substrate junction is chosen as it forms a larger depletion region due to reverse bias of Vdd. So the larger depletion region 
+The drain-channel junction is chosen as it forms a larger depletion region due to reverse bias of Vdd. So the larger depletion region 
 allows for greater charge to be delocalised. Hence this area is the worst place possible for ion to strike.
 The transient currents are compared for LET values of 1,4,8,10. 
 
