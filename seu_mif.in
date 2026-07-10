@@ -1,0 +1,76 @@
+go atlas
+
+
+mesh space.mult=1.0
+x.mesh loc=0.0  spac=0.1
+x.mesh loc=2.0  spac=0.02
+x.mesh loc=2.5  spac=0.02
+x.mesh loc=3.0  spac=0.1
+
+y.mesh loc=-0.02 spac=0.005
+y.mesh loc=0.0   spac=0.005
+y.mesh loc=0.1   spac=0.01
+y.mesh loc=0.5   spac=0.05
+y.mesh loc=1.0   spac=0.1
+
+region num=1 oxide   y.min=-0.02 y.max=0.0 x.min=0.5 x.max=1.8
+region num=2 silicon y.min=0.0
+
+electrode name=gate   x.min=0.5 x.max=1.8 y.min=-0.02 y.max=-0.02
+electrode name=source x.max=0.4 y.min=0.0 y.max=0.0
+electrode name=drain  x.min=1.9 y.max=0.0 y.min=0.0
+electrode name=substrate bottom
+
+doping uniform p.type conc=1e16 reg=2
+doping uniform n.type conc=1e20 x.max=0.4 y.max=0.15
+doping uniform n.type conc=1e20 x.min=1.9 y.max=0.15
+
+models srh conmob fldmob print
+contact name=gate n.poly
+
+##c progam beam
+beam num=1 f.radiate=radiate.lib
+
+#LET = 1 MeV*cm2/mg
+method newton trap
+solve init
+solve vgate=0.0 vdrain=3.3  
+save outfile = device_structure.str
+set let_val="LET = 1 MeV*cm2/mg"
+log outf=seu_let_1.log
+solve b1=1.64e7 tfinal=1e-10 dt=1e-12
+log off
+
+save outfile = post_strike_let1.str
+
+#LET = 4 MeV*cm2/mg
+solve vgate=0.0 vdrain=3.3  
+
+set let_val="LET = 4 MeV*cm2/mg"
+log outf=seu_let_4.log
+solve b1=6.56e7 tfinal=1e-10 dt=1e-12
+log off
+
+save outfile = post_strike_let4.str
+#LET = 8 MeV*cm2/mg
+solve vgate=0.0 vdrain=3.3  
+
+set let_val="LET = 8 MeV*cm2/mg"
+log outf=seu_let_8.log
+solve b1=1.31e8 tfinal=1e-10 dt=1e-12
+log off
+
+save outfile = post_strike_let8.str
+
+#LET = 10 MeV*cm2/mg
+solve vgate=0.0 vdrain=3.3  
+set let_val="LET = 10 MeV*cm2/mg"
+log outf=seu_let_10.log
+solve b1=1.64e8 tfinal=1e-10 dt=1e-12
+log off
+
+save outfile = post_strike_let10.str
+
+# plots
+tonyplot -overlay seu_let_1.log seu_let_4.log seu_let_8.log seu_let_10.log
+tonyplot device_structure.str post_strike_let1.str post_strike_let4.str post_strike_let8.str post_strike_let10.str
